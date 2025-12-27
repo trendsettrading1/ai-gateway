@@ -1,0 +1,38 @@
+{
+  "name": "ai-gateway-desktop",
+  "version": "1.0.0",
+  "description": "Multimodal AI Gateway Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win"
+  },
+  "author": "AI Gateway",
+  "license": "MIT",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
+    "electron-store": "^11.0.2",
+    "express": "^5.2.1",
+    "node-notifier": "^10.0.1"
+  },
+  "build": {
+    "appId": "com.aigateway.desktop",
+    "productName": "AI Gateway",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

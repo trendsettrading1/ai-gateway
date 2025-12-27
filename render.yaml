@@ -1,0 +1,119 @@
+# render.yaml
+# DalaCreate AI Gateway Deployment Configuration
+# Auto-deploys to Render.com when you push to GitHub
+
+services:
+  # ============================================
+  # AI GATEWAY SERVICE (api.dalacreate.co.za)
+  # ============================================
+  - type: web
+    name: dala-create-ai-gateway
+    env: node
+    region: ohio  # Free tier available in Ohio
+    plan: free    # Always free tier
+    
+    # Build configuration
+    buildCommand: |
+      echo "🚀 Building DalaCreate AI Gateway..."
+      npm ci  # Clean install for production
+      echo "✅ Build complete"
+    
+    # Start command
+    startCommand: node gateway.js
+    
+    # Health check (Render pings this to ensure service is healthy)
+    healthCheckPath: /health
+    
+    # Auto-deploy from GitHub
+    autoDeploy: true
+    
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: true  # Render will assign a port
+      - key: SERVICE_NAME
+        value: "DalaCreate AI Gateway"
+      - key: LOG_LEVEL
+        value: info
+    
+    # Disk configuration
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1  # Free tier includes 1GB disk
+    
+    # Advanced settings for free tier optimization
+    advanced:
+      # Restart service if memory exceeds 512MB (free tier limit)
+      memoryMB: 512
+      
+      # Enable auto-scaling (0 means no scaling - free tier)
+      autoscaling:
+        minInstances: 1
+        maxInstances: 1
+        targetMemoryPercent: 80
+        targetCPUPercent: 80
+
+  # ============================================
+  # WEB DEMO SERVICE (demo.dalacreate.co.za)
+  # ============================================
+  - type: web
+    name: dala-create-demo
+    env: static  # Static site (HTML/CSS/JS)
+    region: ohio
+    plan: free
+    
+    # Static site configuration
+    staticPublishPath: ./demo  # Your demo folder
+    
+    # Build command for demo (if you have any build process)
+    buildCommand: |
+      echo "📱 Building DalaCreate Demo..."
+      # You can add demo build steps here
+      echo "✅ Demo build complete"
+    
+    # Routes for single-page app
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    
+    # Auto-deploy
+    autoDeploy: true
+    
+    # CORS headers for API access
+    headers:
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: "*"
+      - path: /*
+        name: Access-Control-Allow-Methods
+        value: "GET, POST, OPTIONS"
+      - path: /*
+        name: Access-Control-Allow-Headers
+        value: "Content-Type, Authorization"
+
+# ============================================
+# ENVIRONMENT VARIABLE GROUPS
+# ============================================
+envVarGroups:
+  - name: production-vars
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: "https://demo.dalacreate.co.za,https://www.dalacreate.co.za"
+      - key: RATE_LIMIT_WINDOW
+        value: "900000"  # 15 minutes in milliseconds
+      - key: RATE_LIMIT_MAX
+        value: "100"     # 100 requests per window
+
+# ============================================
+# CRON JOBS (Scheduled tasks)
+# ============================================
+jobs:
+  - type: cron
+    name: cleanup-temp-files
+    schedule: "0 2 * * *"  # Daily at 2 AM
+    command: find /data/tmp -type f -mtime +1 -delete
+    plan: free
