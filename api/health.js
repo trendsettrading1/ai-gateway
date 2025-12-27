@@ -1,9 +1,0 @@
-﻿// api/health.js - MUST be in api/ folder
-export default function handler(req, res) {
-  res.status(200).json({
-    status: "healthy",
-    service: "DalaCreate AI Gateway",
-    version: "2.0",
-    timestamp: new Date().toISOString()
-  });
-}
