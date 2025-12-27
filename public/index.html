@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>DalaCreate AI Dev Studio</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        .logo { font-size: 64px; color: #2962ff; }
+        .btn { background: #2962ff; color: white; padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; margin: 10px; }
+        .status { background: #f5f7ff; padding: 20px; border-radius: 10px; margin: 20px; }
+    </style>
+</head>
+<body>
+    <div class="logo">🚀</div>
+    <h1>DalaCreate AI Dev Studio</h1>
+    <p>Create mobile apps in 90 seconds with AI</p>
+    
+    <div class="status">
+        <h3>API Status: <span id="api-status">Checking...</span></h3>
+        <button class="btn" onclick="testAPI()">Test API</button>
+        <button class="btn" onclick="generateDemo()">Try Demo</button>
+    </div>
+    
+    <div id="result" style="display: none; background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 20px;">
+        <h3>API Response:</h3>
+        <pre id="response"></pre>
+    </div>
+    
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                document.getElementById('api-status').innerHTML = \✅ \\;
+                alert('API is working! Service: ' + data.service);
+            } catch {
+                document.getElementById('api-status').innerHTML = '❌ Offline';
+                alert('API is offline');
+            }
+        }
+        
+        async function generateDemo() {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('response').textContent = 'Generating component...';
+            
+            try {
+                const response = await fetch('/api/generate-component', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        componentType: 'login_screen',
+                        description: 'modern fitness app login'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        // Check API on load
+        testAPI();
+    </script>
+</body>
+</html>
