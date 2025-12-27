@@ -1,12 +1,15 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DalaCreate AI Dev Studio</title>
     <style>
-        body { font-family: Arial; text-align: center; padding: 50px; }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
         .logo { font-size: 64px; color: #2962ff; }
         .btn { background: #2962ff; color: white; padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; margin: 10px; }
         .status { background: #f5f7ff; padding: 20px; border-radius: 10px; margin: 20px; }
+        .result { background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 20px; display: none; }
     </style>
 </head>
 <body>
@@ -15,40 +18,41 @@
     <p>Create mobile apps in 90 seconds with AI</p>
     
     <div class="status">
-        <h3>API Status: <span id="api-status">Checking...</span></h3>
-        <button class="btn" onclick="testAPI()">Test API</button>
-        <button class="btn" onclick="generateDemo()">Try Demo</button>
+        <h3>System Status</h3>
+        <p>API: <span id="api-status">Checking...</span></p>
+        <button class="btn" onclick="testHealth()">Test API Health</button>
+        <button class="btn" onclick="generateComponent()">Generate Component</button>
     </div>
     
-    <div id="result" style="display: none; background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 20px;">
+    <div id="result" class="result">
         <h3>API Response:</h3>
         <pre id="response"></pre>
     </div>
     
     <script>
-        async function testAPI() {
+        async function testHealth() {
             try {
                 const response = await fetch('/api/health');
                 const data = await response.json();
                 document.getElementById('api-status').innerHTML = \✅ \\;
-                alert('API is working! Service: ' + data.service);
-            } catch {
+                alert('API is healthy! Version: ' + data.version);
+            } catch (error) {
                 document.getElementById('api-status').innerHTML = '❌ Offline';
-                alert('API is offline');
+                alert('API is offline: ' + error.message);
             }
         }
         
-        async function generateDemo() {
+        async function generateComponent() {
             document.getElementById('result').style.display = 'block';
-            document.getElementById('response').textContent = 'Generating component...';
+            document.getElementById('response').textContent = 'Generating...';
             
             try {
-                const response = await fetch('/api/generate-component', {
+                const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         componentType: 'login_screen',
-                        description: 'modern fitness app login'
+                        description: 'modern fitness app login with social buttons'
                     })
                 });
                 
@@ -59,8 +63,8 @@
             }
         }
         
-        // Check API on load
-        testAPI();
+        // Check health on page load
+        testHealth();
     </script>
 </body>
 </html>
