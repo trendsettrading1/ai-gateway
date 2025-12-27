@@ -1,70 +1,29 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DalaCreate AI Dev Studio</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        body { font-family: Arial; text-align: center; padding: 50px; }
         .logo { font-size: 64px; color: #2962ff; }
         .btn { background: #2962ff; color: white; padding: 15px 30px; border: none; border-radius: 10px; cursor: pointer; margin: 10px; }
-        .status { background: #f5f7ff; padding: 20px; border-radius: 10px; margin: 20px; }
-        .result { background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 20px; display: none; }
     </style>
 </head>
 <body>
     <div class="logo">🚀</div>
     <h1>DalaCreate AI Dev Studio</h1>
-    <p>Create mobile apps in 90 seconds with AI</p>
-    
-    <div class="status">
-        <h3>System Status</h3>
-        <p>API: <span id="api-status">Checking...</span></p>
-        <button class="btn" onclick="testHealth()">Test API Health</button>
-        <button class="btn" onclick="generateComponent()">Generate Component</button>
-    </div>
-    
-    <div id="result" class="result">
-        <h3>API Response:</h3>
-        <pre id="response"></pre>
-    </div>
+    <p>Create mobile apps in 90 seconds</p>
+    <button class="btn" onclick="testAPI()">Test API</button>
     
     <script>
-        async function testHealth() {
+        async function testAPI() {
             try {
                 const response = await fetch('/api/health');
                 const data = await response.json();
-                document.getElementById('api-status').innerHTML = \✅ \\;
-                alert('API is healthy! Version: ' + data.version);
-            } catch (error) {
-                document.getElementById('api-status').innerHTML = '❌ Offline';
-                alert('API is offline: ' + error.message);
+                alert(\`API is working! \${data.service} - \${data.status}\`);
+            } catch {
+                alert('API is offline');
             }
         }
-        
-        async function generateComponent() {
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('response').textContent = 'Generating...';
-            
-            try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        componentType: 'login_screen',
-                        description: 'modern fitness app login with social buttons'
-                    })
-                });
-                
-                const data = await response.json();
-                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                document.getElementById('response').textContent = 'Error: ' + error.message;
-            }
-        }
-        
-        // Check health on page load
-        testHealth();
     </script>
 </body>
 </html>

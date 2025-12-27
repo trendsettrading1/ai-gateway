@@ -1,32 +1,21 @@
-﻿// File: api/generate.js
-// AI component generation endpoint
+﻿// api/generate.js - AI component generation
 module.exports = async (req, res) => {
-  // Only allow POST requests
   if (req.method !== 'POST') {
-    return res.status(405).json({ 
-      error: 'Method not allowed',
-      allowed: ['POST']
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
   
   try {
     const { componentType, description } = req.body;
     
-    // Your AI logic here
     const response = {
       success: true,
-      component: \// Generated \ component\,
-      description: description,
+      component: `// Generated ${componentType}: ${description}`,
       estimated_cost: 'R2.50',
-      generated_at: new Date().toISOString(),
-      instructions: 'Copy this code to your React Native project'
+      timestamp: new Date().toISOString()
     };
     
     res.json(response);
   } catch (error) {
-    res.status(500).json({ 
-      error: 'Generation failed',
-      message: error.message 
-    });
+    res.status(500).json({ error: error.message });
   }
 };
