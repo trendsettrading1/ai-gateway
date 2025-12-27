@@ -1,18 +1,96 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>DalaCreate - AI App Generator</title>
+    <title>DalaCreate AI App Generator</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        .logo { font-size: 48px; color: #2962ff; }
-        .demo-btn { background: #2962ff; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #1a237e 0%, #2962ff 100%); color: white; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 60px; }
+        .logo { font-size: 64px; margin-bottom: 20px; }
+        h1 { font-size: 48px; margin-bottom: 20px; }
+        .subtitle { font-size: 24px; opacity: 0.9; margin-bottom: 40px; }
+        .cards { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
+        .card { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; width: 350px; backdrop-filter: blur(10px); }
+        .card h2 { margin-bottom: 20px; color: #bbdefb; }
+        .status { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin: 20px 0; }
+        .btn { background: #00c853; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 18px; cursor: pointer; margin: 10px; }
+        .btn:hover { background: #00e676; }
     </style>
 </head>
 <body>
-    <div class="logo">🚀 DalaCreate</div>
-    <h1>AI-Powered App Generator</h1>
-    <p>Create mobile apps in 90 seconds with AI</p>
-    <button class="demo-btn" onclick="alert('Coming soon! API is running at api.dalacreate.co.za')">Try Live Demo</button>
-    <p><small>API Gateway: <a href="https://api.dalacreate.co.za">api.dalacreate.co.za</a></small></p>
+    <div class="container">
+        <header>
+            <div class="logo">🚀</div>
+            <h1>DalaCreate AI Dev Studio</h1>
+            <p class="subtitle">Create mobile apps in 90 seconds with AI</p>
+        </header>
+        
+        <div class="cards">
+            <div class="card">
+                <h2>🚀 Live Demo</h2>
+                <p>Try our AI-powered app generator</p>
+                <div class="status">
+                    <p>API Status: <span id="api-status">Checking...</span></p>
+                    <p>Demo Status: <span id="demo-status">Checking...</span></p>
+                </div>
+                <button class="btn" onclick="testAPI()">Test AI Gateway</button>
+                <button class="btn" onclick="generateDemoApp()">Generate Demo App</button>
+            </div>
+            
+            <div class="card">
+                <h2>⚡ How It Works</h2>
+                <ol style="margin-left: 20px; line-height: 2;">
+                    <li>Describe your app idea</li>
+                    <li>AI generates the code</li>
+                    <li>Download working APK</li>
+                    <li>Publish to app stores</li>
+                </ol>
+                <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">Starting at R199 per app</p>
+            </div>
+            
+            <div class="card">
+                <h2>📞 Get Started</h2>
+                <p>Contact us to build your app:</p>
+                <p>📧 info@dalacreate.co.za</p>
+                <p>🌐 www.dalacreate.co.za</p>
+                <p>📍 South Africa</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check API health
+        async function checkHealth() {
+            try {
+                const response = await fetch('https://dala-create-gateway.onrender.com/health');
+                const data = await response.json();
+                document.getElementById('api-status').innerHTML = \✅ \\;
+                return true;
+            } catch (error) {
+                document.getElementById('api-status').innerHTML = '❌ Offline';
+                return false;
+            }
+        }
+        
+        // Test API function
+        async function testAPI() {
+            const isHealthy = await checkHealth();
+            if (isHealthy) {
+                alert('✅ AI Gateway is working! Ready to generate apps.');
+            } else {
+                alert('⚠️ Gateway is offline. Please try again later.');
+            }
+        }
+        
+        // Demo app generation
+        async function generateDemoApp() {
+            alert('🚀 This would generate a demo app!\\n\\nIn production, this would:\\n1. Call AI Gateway API\\n2. Generate React Native code\\n3. Build APK\\n4. Send download link');
+        }
+        
+        // Check on page load
+        checkHealth();
+        document.getElementById('demo-status').innerHTML = '✅ Online';
+    </script>
 </body>
 </html>
