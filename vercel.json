@@ -1,0 +1,30 @@
+﻿{
+  ""version"": 2,
+  ""builds"": [
+    {
+      ""src"": ""gateway.js"",
+      ""use"": ""@vercel/node""
+    },
+    {
+      ""src"": ""demo/**"",
+      ""use"": ""@vercel/static""
+    }
+  ],
+  ""routes"": [
+    {
+      ""src"": ""/api/(.*)"",
+      ""dest"": ""/gateway.js""
+    },
+    {
+      ""src"": ""/health"",
+      ""dest"": ""/gateway.js""
+    },
+    {
+      ""src"": ""/(.*)"",
+      ""dest"": ""/demo/""
+    }
+  ],
+  ""env"": {
+    ""NODE_ENV"": ""production""
+  }
+}
