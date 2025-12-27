@@ -1,5 +1,5 @@
 ﻿# DalaCreate AI Gateway Deployment
-# Simple working version for Render free tier
+# CORRECT version for Render Blueprints
 
 services:
   # 1. AI GATEWAY (Backend API)
@@ -16,11 +16,12 @@ services:
       - key: NODE_ENV
         value: production
 
-  # 2. DEMO WEBSITE (Frontend)
-  - type: static
+  # 2. DEMO WEBSITE (Frontend) - FIXED: type: web, env: static
+  - type: web
     name: dala-create-demo
+    env: static
     plan: free
     region: ohio
-    buildCommand: echo "Building demo..."
-    publishPath: ./demo
+    buildCommand: echo "Building demo site..."
+    staticPublishPath: ./demo
     autoDeploy: true
